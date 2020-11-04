@@ -35,7 +35,7 @@ not recursive
 ```
 ```
 
-* Access http://10.10.10.6/test.php, which runs phpinfo
+* Access http://10.10.10.6/test.php, which runs phpinfo().
 ```
 System 	Linux popcorn 2.6.31-14-generic-pae #48-Ubuntu SMP Fri Oct 16 15:22:42 UTC 2009 i686
 Build Date 	May 2 2011 22:56:18
