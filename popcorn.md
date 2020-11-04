@@ -87,7 +87,7 @@ www-data
 ```
 
 ## Privilege Escalation
-* google search for linux 2.6.31 local privilege escalation revealed potential 'dirtycow' exploit. 
+* Google search for linux 2.6.31 local privilege escalation revealed potential 'dirtycow' exploit. 
 * Successfully priv esc using [FireFart's exploit](https://raw.githubusercontent.com/FireFart/dirtycow/master/dirty.c)
 * Transferred exploit using wget and python SimpleHTTPServer
 ```
