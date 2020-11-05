@@ -198,7 +198,8 @@ fanis/      spamfilter/
 aeff3def0c765c2677b94715cffa73ac
 ```
 
-* Other exploitation methods 
+## Exploring Other Methods
+
 * Gobuster with Web-Content wordlist
 ```
 gobuster dir -u https://10.10.10.7 -w /usr/share/seclists/Discovery/Web-Content/big.txt -k
