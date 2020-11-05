@@ -32,8 +32,7 @@ extensions:php,aspx,asp,txt
 not recursive
 ```
 * Webscan Results
-```
-```
+![image](https://raw.githubusercontent.com/kookiecrack/images/main/dirbuster.png)
 
 * Access http://10.10.10.6/test.php, which runs phpinfo().
 ```
