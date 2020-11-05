@@ -188,3 +188,39 @@ aeff3def0c765c2677b94715cffa73ac
 ```
 
 * Other exploitation methods [TBC]
+```
+gobuster dir -u https://10.10.10.7 -w /usr/share/seclists/Discovery/Web-Content/big.txt -k
+```
+```
+Gobuster v3.0.1
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@_FireFart_)
+===============================================================
+[+] Url:            https://10.10.10.7
+[+] Threads:        10
+[+] Wordlist:       /usr/share/seclists/Discovery/Web-Content/big.txt
+[+] Status codes:   200,204,301,302,307,401,403
+[+] User Agent:     gobuster/3.0.1
+[+] Timeout:        10s
+===============================================================
+2020/11/05 02:30:12 Starting gobuster
+===============================================================
+/.htaccess (Status: 403)
+/.htpasswd (Status: 403)
+/admin (Status: 301)
+/cgi-bin/ (Status: 403)
+/configs (Status: 301)
+/favicon.ico (Status: 200)
+/help (Status: 301)
+/images (Status: 301)
+/lang (Status: 301)
+/libs (Status: 301)
+/mail (Status: 301)
+/modules (Status: 301)
+/panel (Status: 301)
+/recordings (Status: 301)
+/robots.txt (Status: 200)
+/static (Status: 301)
+/themes (Status: 301)
+/var (Status: 301)
+/vtigercrm (Status: 301)
+```
