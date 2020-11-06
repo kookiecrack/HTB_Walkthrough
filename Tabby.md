@@ -67,4 +67,26 @@ by OJ Reeves (@TheColonial) & Christian Mehlmauer (@_FireFart_)
 ===============================================================
 
 
+kali@kali:~/HTB/tabby$ gobuster -u http://10.10.10.194 -w /usr/share/wordlists/dirbuster/directory-list-lowercase-
+2.3-medium.txt -x txt,php,aspx,asp -t 40 dir                                                                      
+===============================================================                                                   
+Gobuster v3.0.1                                                                                                   
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@_FireFart_)                                                   
+===============================================================                                                   
+[+] Url:            http://10.10.10.194                                                                           
+[+] Threads:        40                                                                                            
+[+] Wordlist:       /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt                        
+[+] Status codes:   200,204,301,302,307,401,403                                                                   
+[+] User Agent:     gobuster/3.0.1                                                                                
+[+] Extensions:     asp,txt,php,aspx                                                                              
+[+] Timeout:        10s                                                                                           
+===============================================================                                                   
+2020/11/06 01:14:33 Starting gobuster                                                                             
+===============================================================                                                   
+/files (Status: 301) 
+===============================================================                                                   
+2020/11/06 03:13:31 Finished                                                                                      
+===============================================================  
 
+
+```
