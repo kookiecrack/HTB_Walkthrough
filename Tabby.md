@@ -589,3 +589,15 @@ c1078b3d1b7c96fe4394817cc528e4f8
 /home/ash/.gnupg/trustdb.gpg                                                                                      
 /home/ash/.gnupg/pubring.kbx                                                                                      
 ```
+* Ran LinEnum.sh
+
+```
+[+] We're a member of the (lxd) group - could possibly misuse these rights!
+uid=1000(ash) gid=1000(ash) groups=1000(ash),4(adm),24(cdrom),30(dip),46(plugdev),116(lxd)
+```
+
+2.) Then this - sudo ./build-alpine
+3.) If above command run properly without errors then congrats!
+4.) If not maybe the error is due to mirror sites but it will create a rootfs directory in same folder i.e "lxd-alpine-builder" .
+5.) Goto - cd/rootfs/usr/share/alpine-mirrors/Mirrors.txt
+6.) Open that .txt file with any editor and remove all the mirror sites except first one, then save it there only.
