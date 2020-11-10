@@ -290,11 +290,23 @@ tmpfs /run/snapd/ns tmpfs rw,nosuid,nodev,noexec,relatime,size=203524k,mode=755 
 tmpfs /var/snap/lxd/common/ns tmpfs rw,relatime,size=1024k,mode=700 0 0
 binfmt_misc /proc/sys/fs/binfmt_misc binfmt_misc rw,nosuid,nodev,noexec,relatime 0 0
 ```
-* After blindly fuzzing and even installing tomcat 9 to determine the location, I finally found this [page](https://packages.debian.org/sid/all/tomcat9/filelist) which provided info on the default location for Tomcat 9 on debian system. :X
+* After blindly fuzzing and even installing tomcat 9 to determine the location, I finally found this [page](https://packages.debian.org/sid/all/tomcat9/filelist) which provided info on the default location for Tomcat 9 on debian system. :X 
 
 ```
 /usr/share/tomcat9/etc/tomcat-users.xml
 ```
+* Note: I tried re-installing tomcat 9 and found the path.
+```
+apt-cache search tomcat 9
+sudo apt install tomcat9
+sudo updatedb
+
+kali@kali:~$ locate tomcat-users.xml
+/etc/tomcat9/tomcat-users.xml
+/usr/share/tomcat9/etc/tomcat-users.xml
+/var/lib/ucf/cache/:etc:tomcat9:tomcat-users.xml
+```
+
 ![image](https://raw.githubusercontent.com/kookiecrack/images/main/tomcat-pw-tabby.png)
 
 * Successfully obtained the credentials to tomcat. user username="tomcat" password="$3cureP4s5w0rd123!" roles="admin-gui,manager-script". Logged in to tomcat host-manager
