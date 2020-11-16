@@ -174,3 +174,26 @@ Exported revision 5.
 
 
 Add devops.worker.htb to /etc/hosts
+kali@kali:~/HTB/worker$ svn checkout svn://worker.htb
+Skipped 'dimension.worker.htb' -- An obstructing working copy was found
+   C moved.txt
+Checked out revision 5.
+kali@kali:~/HTB/worker$ ls
+dimension.worker.htb  moved.txt  output  ports  svn_extractor.py  www
+kali@kali:~/HTB/worker$ svn checkout -r 1 svn://worker.htb
+Skipped 'moved.txt' -- Node remains in conflict
+Skipped 'dimension.worker.htb' -- An obstructing working copy was found
+Checked out revision 1.
+kali@kali:~/HTB/worker$ svn checkout -r 2 svn://worker.htb
+Skipped 'moved.txt' -- Node remains in conflict
+A    deploy.ps1
+Skipped 'dimension.worker.htb' -- An obstructing working copy was found
+Checked out revision 2.
+kali@kali:~/HTB/worker$ cat deploy.ps1 
+$user = "nathen" 
+$plain = "wendel98"
+$pwd = ($plain | ConvertTo-SecureString)
+$Credential = New-Object System.Management.Automation.PSCredential $user, $pwd
+$args = "Copy-Site.ps1"
+Start-Process powershell.exe -Credential $Credential -ArgumentList ("-file $args")
+kali@kali:~/HTB/worker$ 
